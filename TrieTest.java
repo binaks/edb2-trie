@@ -21,5 +21,17 @@ public class TrieTest {
         assertTrue(trie.hasWord("tap"));
         assertTrue(trie.hasWord("tapioca"));
         assertTrue(trie.hasWord("fuligi"));
+
+        trie.deleteWord("tapi");
+        assertFalse(trie.hasWord("tapi"));
+
+        trie.deleteWord("tapioca");
+        assertTrue(trie.hasWord("tap"));
+        assertFalse(trie.hasWord("tapioca"));
+
+        trie.deleteWord("tap");
+        trie.deleteWord("fuligi");
+
+        assertTrue(trie.getRoot().getChildren().isEmpty());
     }
 }

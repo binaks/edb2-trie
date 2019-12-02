@@ -1,10 +1,13 @@
 package com.binaks;
 
+import java.util.Vector;
+
 public class Trie {
     private Node root;
 
     public Trie() {
         root = new Node("");
+        root.setParent(null);
     }
 
     public Node getRoot() {
@@ -63,7 +66,7 @@ public class Trie {
                     while (i < word.length()) {
                         letter = String.valueOf(word.charAt(i));
                         current.addChild(letter);
-                        current = current.getChildren().elementAt(current.getChildren().size() - 1);
+                        current = current.getChildren().lastElement();
                         i++;
                     }
 
@@ -116,6 +119,69 @@ public class Trie {
             return;
         }
 
+        Vector<Node> words = new Vector<>();
+
+        // checando se a palavra é prefixo de outra
+        for (int i = 0; i < word.length(); ++i) {
+            String letter = String.valueOf(word.charAt(i));
+
+            for (Node child : current.getChildren()) {
+                // achar a palavra, ver se tem filhos
+                if (letter.equals(child.getContent())) {
+                    current = child;
+
+                    // adicionando ao vetor todas as palavras anteriores à que quero remover
+                    if (current.isWord() && i < word.length() - 1) {
+                        words.add(current);
+                    }
+
+                    if (i == word.length() - 1) {
+                        // se tiver filhos soh nao eh mais palavra
+                        if (!current.getChildren().isEmpty()) {
+                            current.setWord(false);
+                        }
+                        // mas se nao tiver, tem que apagar ate o ultimo no que era palavra ou root
+                        else {
+                            Node lastWord = new Node();
+
+                            if (!words.isEmpty()) {
+                                lastWord = words.lastElement();
+                            }
+
+                            Node parentOfCurrent = current.getParent();
+
+                            while (current != lastWord && current != root) {
+                                parentOfCurrent.removeChild(current);
+                                current = parentOfCurrent;
+                                parentOfCurrent = current.getParent();
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

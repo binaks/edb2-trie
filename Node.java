@@ -6,6 +6,7 @@ public class Node {
     private Vector<Node> children;
     private String content;
     private boolean isWord;
+    private Node parent;
 
     public Node() {
         this.children = new Vector<>();
@@ -42,8 +43,21 @@ public class Node {
         isWord = word;
     }
 
+    public Node getParent() {
+        return parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
+
     public void addChild(String content) {
         Node child = new Node(content);
+        child.setParent(this);
         this.children.add(child);
+    }
+
+    public void removeChild(Node child) {
+        this.children.remove(child);
     }
 }
