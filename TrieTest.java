@@ -6,14 +6,20 @@ import static org.junit.Assert.*;
 
 public class TrieTest {
     @Test
-    public void testIsWord() {
+    public void trieTest() {
         Trie trie = new Trie();
         trie.insertWord("tapi");
+        trie.insertWord("tapioca");
+        trie.insertWord("tap");
+        trie.insertWord("fuligi");
 
         assertFalse(trie.hasWord(""));
         assertFalse(trie.hasWord("ok"));
         assertFalse(trie.hasWord("ta"));
         assertFalse(trie.hasWord("tapia"));
         assertTrue(trie.hasWord("tapi"));
+        assertTrue(trie.hasWord("tap"));
+        assertTrue(trie.hasWord("tapioca"));
+        assertTrue(trie.hasWord("fuligi"));
     }
 }
