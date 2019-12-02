@@ -8,9 +8,12 @@ public class TrieTest {
     @Test
     public void testIsWord() {
         Trie trie = new Trie();
+        trie.insertWord("tapi");
 
-        assertFalse(trie.isWord("bla"));
-        assertFalse(trie.isWord("1"));
-//        assertTrue(trie.isWord("blabla"));
+        assertFalse(trie.hasWord(""));
+        assertFalse(trie.hasWord("ok"));
+        assertFalse(trie.hasWord("ta"));
+        assertFalse(trie.hasWord("tapia"));
+        assertTrue(trie.hasWord("tapi"));
     }
 }

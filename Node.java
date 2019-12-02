@@ -9,11 +9,13 @@ public class Node {
 
     public Node() {
         this.children = new Vector<>();
+        this.isWord = false;
     }
 
     public Node(String content) {
         this.content = content;
         this.children = new Vector<>();
+        this.isWord = false;
     }
 
     public Vector<Node> getChildren() {
@@ -41,7 +43,7 @@ public class Node {
     }
 
     public void addChild(String content) {
-        Node child = new Node();
-        this.children.add();
+        Node child = new Node(content);
+        this.children.add(child);
     }
 }

@@ -7,46 +7,42 @@ public class Trie {
         root = new Node("");
     }
 
+    public Node getRoot() {
+        return root;
+    }
+
     public void insertWord(String word) {
         Node current = root;
 
-        if (isWord(word)) {
+        if (hasWord(word)) {
             return;
         }
 
         if (current.getChildren().isEmpty()) {
-            // TODO: adiciona cada letra
-        }
+            for (int i = 0; i < word.length(); ++i) {
+                String letter = String.valueOf(word.charAt(i));
 
-        for (int i = 0; i < word.length(); ++i) {
-            String letter = String.valueOf(word.charAt(i));
-
-            for (Node child : current.getChildren()) {
-                if (letter.equals(child.getContent())) {
-
-                    current = child;
-                    break;
-                }
+                current.addChild(letter);
+                current = current.getChildren().elementAt(0);
             }
 
-            if (!letter.equals(current.getContent())) {
-                Node p = new Node(letter);
-                current = p;
-            }
+            current.setWord(true);
         }
 
     }
 
-    public boolean isWord(String word) {
+    public boolean hasWord(String word) {
         Node current = root;
 
         // percorrendo cada letra da palavra a ser procurada
         for (int i = 0; i < word.length(); ++i) {
-                String letter = String.valueOf(word.charAt(i));
+            String letter = String.valueOf(word.charAt(i));
 
             if (current.getChildren().isEmpty()) {
                 return false;
             }
+
+            boolean found = false;
 
             // a ideia é testar a letra com todos os filhos do nó atual
             for (Node child : current.getChildren()) {
@@ -54,15 +50,16 @@ public class Trie {
                 if (letter.equals(child.getContent())) {
                     // se chegou no final da palavra a ser procurada, retorna se é uma palavra ou não
                     if (i == word.length() - 1) {
-                        return current.isWord();
+                        return child.isWord();
                     }
                     current = child;
+                    found = true;
                     break;
                 }
             }
 
             // se nao teve nenhum filho com a letra igual, entao nao é palavra
-            if (!letter.equals(current.getContent())) return false;
+            if (!found) return false;
         }
 
         return false;
