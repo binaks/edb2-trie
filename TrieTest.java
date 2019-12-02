@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class TrieTest {
     @Test
-    public void trieTest() {
+    public void testInsertAndRemove() {
         Trie trie = new Trie();
         trie.insertWord("tapi");
         trie.insertWord("tapioca");

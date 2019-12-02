@@ -1,21 +1,21 @@
 package com.binaks;
 
+import java.util.Stack;
 import java.util.Vector;
 
 public class Trie {
-    private Node root;
+    private TrieNode root;
 
     public Trie() {
-        root = new Node("");
-        root.setParent(null);
+        root = new TrieNode("");
     }
 
-    public Node getRoot() {
+    public TrieNode getRoot() {
         return root;
     }
 
     public void insertWord(String word) {
-        Node current = root;
+        TrieNode current = root;
 
         // se a palavra ja tá na árvore, nao precisa fazer nada
         if (hasWord(word)) {
@@ -44,7 +44,7 @@ public class Trie {
             else {
                 boolean isPrefix = false;
 
-                for (Node child : current.getChildren()) {
+                for (TrieNode child : current.getChildren()) {
                     // isso significa que tem um no com a letra da palavra que eu quero adicionar
                     if (letter.equals(child.getContent())) {
                         isPrefix = true;
@@ -78,7 +78,7 @@ public class Trie {
     }
 
     public boolean hasWord(String word) {
-        Node current = root;
+        TrieNode current = root;
 
         // percorrendo cada letra da palavra a ser procurada
         for (int i = 0; i < word.length(); ++i) {
@@ -91,7 +91,7 @@ public class Trie {
             boolean found = false;
 
             // a ideia é testar a letra com todos os filhos do nó atual
-            for (Node child : current.getChildren()) {
+            for (TrieNode child : current.getChildren()) {
                 // se achar uma letra igual, o current vira esse nó e sai desse loop aqui pra procurar se tem a prox letra
                 if (letter.equals(child.getContent())) {
                     // se chegou no final da palavra a ser procurada, retorna se é uma palavra ou não
@@ -112,27 +112,29 @@ public class Trie {
     }
 
     public void deleteWord(String word) {
-        Node current = root;
+        TrieNode current = root;
 
         // se a palavra nao estiver na arvore, nao precisa fazer nada
         if (!this.hasWord(word)) {
             return;
         }
 
-        Vector<Node> words = new Vector<>();
+        Stack<TrieNode> pastLetters = new Stack<>();
+        Vector<TrieNode> pastWords = new Vector<>();
 
         // checando se a palavra é prefixo de outra
         for (int i = 0; i < word.length(); ++i) {
             String letter = String.valueOf(word.charAt(i));
 
-            for (Node child : current.getChildren()) {
+            for (TrieNode child : current.getChildren()) {
                 // achar a palavra, ver se tem filhos
                 if (letter.equals(child.getContent())) {
+                    pastLetters.push(current);
                     current = child;
 
                     // adicionando ao vetor todas as palavras anteriores à que quero remover
                     if (current.isWord() && i < word.length() - 1) {
-                        words.add(current);
+                        pastWords.add(current);
                     }
 
                     if (i == word.length() - 1) {
@@ -142,18 +144,19 @@ public class Trie {
                         }
                         // mas se nao tiver, tem que apagar ate o ultimo no que era palavra ou root
                         else {
-                            Node lastWord = new Node();
+                            TrieNode lastWord = new TrieNode();
 
-                            if (!words.isEmpty()) {
-                                lastWord = words.lastElement();
+                            if (!pastWords.isEmpty()) {
+                                lastWord = pastWords.lastElement();
                             }
 
-                            Node parentOfCurrent = current.getParent();
-
                             while (current != lastWord && current != root) {
+                                TrieNode parentOfCurrent = pastLetters.peek();
+
                                 parentOfCurrent.removeChild(current);
                                 current = parentOfCurrent;
-                                parentOfCurrent = current.getParent();
+
+                                pastLetters.pop();
                             }
                         }
                     }
@@ -164,6 +167,9 @@ public class Trie {
         }
     }
 
+    public void autocomplete() {
+
+    }
 }
 
 
