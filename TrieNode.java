@@ -6,16 +6,19 @@ public class TrieNode {
     private boolean isWord;
     private Vector<TrieNode> children;
     private String content;
+    private String text;
 
     public TrieNode() {
         this.children = new Vector<>();
         this.isWord = false;
+        this.text = "";
     }
 
     public TrieNode(String content) {
         this.content = content;
         this.children = new Vector<>();
         this.isWord = false;
+        this.text = "";
     }
 
     public Vector<TrieNode> getChildren() {
@@ -42,5 +45,13 @@ public class TrieNode {
 
     public void removeChild(TrieNode child) {
         this.children.remove(child);
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

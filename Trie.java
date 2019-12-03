@@ -1,5 +1,7 @@
 package com.binaks;
 
+import jdk.dynalink.beans.StaticClass;
+
 import java.util.Stack;
 import java.util.Vector;
 
@@ -37,6 +39,7 @@ public class Trie {
                 }
                 // sai do loop, vira uma palavra mesmo e sai
                 current.setWord(true);
+                current.setText(word);
                 return;
             }
 
@@ -52,6 +55,7 @@ public class Trie {
                         // se a palavra inteira ja for prefixo de outra que ta la
                         if (i == word.length() - 1) {
                             child.setWord(true);
+                            child.setText(word);
                             return;
                         }
 
@@ -71,6 +75,7 @@ public class Trie {
                     }
 
                     current.setWord(true);
+                    current.setText(word);
                     return;
                 }
             }
@@ -141,6 +146,7 @@ public class Trie {
                         // se tiver filhos soh nao eh mais palavra
                         if (!current.getChildren().isEmpty()) {
                             current.setWord(false);
+                            current.setText("");
                         }
                         // mas se nao tiver, tem que apagar ate o ultimo no que era palavra ou root
                         else {
@@ -167,8 +173,48 @@ public class Trie {
         }
     }
 
-    public void autocomplete() {
+    public Vector<String> autoComplete(String prefix) {
+        TrieNode current = root;
+        Vector<String> words = new Vector<>();
 
+        for (int i = 0; i < prefix.length(); ++i) {
+            String letter = String.valueOf(prefix.charAt(i));
+
+            for (TrieNode child : current.getChildren()) {
+                if (letter.equals(child.getContent())) {
+                    current = child;
+                    break;
+                }
+            }
+        }
+
+        return findWordsAfter(current, words);
+    }
+
+    public Vector<String> autoComplete(String prefix, int qty) {
+        Vector<String> words = autoComplete(prefix);
+
+        if (qty < words.size()) {
+            words.setSize(qty);
+        }
+
+        return words;
+    }
+
+    public Vector<String> findWordsAfter(TrieNode node, Vector<String> words) {
+        if (node.isWord()) {
+            words.add(node.getText());
+        }
+
+        if (node.getChildren().isEmpty()) {
+            return words;
+        }
+
+        for (TrieNode child : node.getChildren()) {
+            findWordsAfter(child, words);
+        }
+
+        return words;
     }
 }
 
