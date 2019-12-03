@@ -37,7 +37,6 @@ public class TrieNode {
         isWord = word;
     }
 
-
     public void addChild(String content) {
         TrieNode child = new TrieNode(content);
         this.children.add(child);

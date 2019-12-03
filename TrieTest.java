@@ -73,6 +73,4 @@ public class TrieTest {
         assertFalse(trie.autoComplete("ta").contains("tapio"));
         assertFalse(trie.autoComplete("ta").contains("fuligi"));
     }
-
-
 }
